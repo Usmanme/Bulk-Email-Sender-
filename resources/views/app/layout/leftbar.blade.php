@@ -65,7 +65,29 @@
                     <span class="menu-title text-truncate" data-i18n="Email">Dashboard</span>
                 </a>
             </li>
+            <li class="navigation-header">
+                <span data-i18n="Others">Features</span>
+                <i data-feather="more-horizontal"></i>
+            </li>
+            <li class="nav-item {{ request()->routeIs('dashboard') ? 'active hover_text__white' : null }}">
+                <a class="d-flex align-items-center" href="{{ route('dashboard') }}">
+                    <i data-feather='circle'></i>
+                    <span class="menu-item text-truncate" data-i18n="Feed Usage">Directory</span>
+                </a>
+            </li>
+            <li class="nav-item {{ request()->routeIs('dashboard') ? 'active hover_text__white' : null }}">
+                <a class="d-flex align-items-center" href="{{ route('dashboard') }}">
+                    <i data-feather='circle'></i>
+                    <span class="menu-item text-truncate" data-i18n="Feed Usage">Send Mail</span>
+                </a>
+            </li>
 
+            <li class="nav-item {{ request()->routeIs('dashboard') ? 'active hover_text__white' : null }}">
+                <a class="d-flex align-items-center" href="{{ route('dashboard') }}">
+                    <i data-feather='circle'></i>
+                    <span class="menu-item text-truncate" data-i18n="Feed Usage">History</span>
+                </a>
+            </li>
             {{-- Roles & Permission Menu --}}
             {{-- <li class="nav-item ">
                 <a class="d-flex align-items-center" href="javascript:void(0)">
@@ -147,8 +169,8 @@
                 </ul>
             </li> --}}
 
-               {{-- Sites Menu --}}
-               {{-- <li class="nav-item ">
+            {{-- Sites Menu --}}
+            {{-- <li class="nav-item ">
                     <a class="d-flex align-items-center" href="javascript:void(0)">
                         <i data-feather="shield"></i>
                         <span class="menu-title text-truncate" data-i18n="Sites">Sites</span>
