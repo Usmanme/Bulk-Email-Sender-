@@ -31,6 +31,7 @@ Route::group(
         Route::post('/store', [EmailController::class, 'store'])->name('store');
         Route::get('/import-email-view', [EmailController::class, 'importView'])->name('importView');
         Route::post('/import-file', [EmailController::class, 'importFile'])->name('importFile');
+        Route::get('/history', [EmailController::class, 'history'])->name('history');
 
     }
 );

@@ -30,4 +30,12 @@ class EmailController extends Controller
     {
         dd("Here Done");
     }
+
+    public function history()
+    {
+        return view('app.email.history');
+
+    }
+
+
 }
