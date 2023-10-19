@@ -36,3 +36,5 @@ Route::group(
     }
 );
 
+
+Route::get('/read', [EmailController::class, 'read'])->name('read');
