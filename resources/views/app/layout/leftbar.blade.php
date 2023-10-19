@@ -59,7 +59,7 @@
 
     <div class="main-menu-content">
         <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
-            <li class="nav-item {{ request()->routeIs('dashboard') ? 'active' : null }}">
+            <li class="nav-item {{ request()->routeIs('dashboard') ? 'active hover_text__white' : null }}">
                 <a class="d-flex align-items-center" href="{{ route('dashboard') }}">
                     <i data-feather="home"></i>
                     <span class="menu-title text-truncate" data-i18n="Email">Dashboard</span>
@@ -69,14 +69,14 @@
                 <span data-i18n="Others">Features</span>
                 <i data-feather="more-horizontal"></i>
             </li>
-            <li class="nav-item {{ request()->routeIs('dashboard') ? 'active hover_text__white' : null }}">
-                <a class="d-flex align-items-center" href="{{ route('dashboard') }}">
+            <li class="nav-item {{ request()->routeIs('send-email.importView') ? 'active hover_text__white' : null }}">
+                <a class="d-flex align-items-center" href="{{ route('send-email.importView') }}">
                     <i data-feather='circle'></i>
                     <span class="menu-item text-truncate" data-i18n="Feed Usage">Directory</span>
                 </a>
             </li>
-            <li class="nav-item {{ request()->routeIs('dashboard') ? 'active hover_text__white' : null }}">
-                <a class="d-flex align-items-center" href="{{ route('dashboard') }}">
+            <li class="nav-item {{ request()->routeIs('send-email.index') ? 'active hover_text__white' : null }}">
+                <a class="d-flex align-items-center" href="{{ route('send-email.index') }}">
                     <i data-feather='circle'></i>
                     <span class="menu-item text-truncate" data-i18n="Feed Usage">Send Mail</span>
                 </a>

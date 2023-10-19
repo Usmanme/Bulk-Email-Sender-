@@ -134,3 +134,12 @@ Breadcrumbs::for('sites.floors.units.edit', function (BreadcrumbTrail $trail, $s
     $trail->parent('sites.floors.units.index', $site_id, $floor_id);
     $trail->push('Edit Unit');
 });
+
+Breadcrumbs::for('send-email.index', function (BreadcrumbTrail $trail) {
+    $trail->parent('dashboard');
+    $trail->push('Send Email', route('send-email.index'));
+});
+Breadcrumbs::for('send-email.importView', function (BreadcrumbTrail $trail) {
+    $trail->parent('dashboard');
+    $trail->push('Import Emails', route('send-email.importView'));
+});
