@@ -48,7 +48,7 @@
                 @csrf
                 
                 <div class="mb-3">
-                    <label for="formFileMultiple" class="form-label">Attach Your Documents</label>
+                    <label for="formFileMultiple" class="form-label">Import Email File "txt,xls,xlsx,csv"</label>
                     <input class="form-control" type="file" id="formFileMultiple" name="file">
                 </div>
 
