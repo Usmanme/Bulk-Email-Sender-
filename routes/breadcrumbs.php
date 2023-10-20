@@ -143,3 +143,8 @@ Breadcrumbs::for('send-email.importView', function (BreadcrumbTrail $trail) {
     $trail->parent('dashboard');
     $trail->push('Import Emails', route('send-email.importView'));
 });
+
+Breadcrumbs::for('document-upload.document-index', function (BreadcrumbTrail $trail) {
+    $trail->parent('dashboard');
+    $trail->push('Documents Upload', route('document-upload.document-index'));
+});

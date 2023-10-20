@@ -82,6 +82,13 @@
                 </a>
             </li>
 
+            <li class="nav-item {{ request()->routeIs('document-upload.document-index') ? 'active hover_text__white' : null }}">
+                <a class="d-flex align-items-center" href="{{ route('document-upload.document-index') }}">
+                    <i data-feather='circle'></i>
+                    <span class="menu-item text-truncate" data-i18n="Feed Usage">Documets</span>
+                </a>
+            </li>
+
             <li class="nav-item {{ request()->routeIs('dashboard') ? 'active hover_text__white' : null }}">
                 <a class="d-flex align-items-center" href="{{ route('dashboard') }}">
                     <i data-feather='circle'></i>
