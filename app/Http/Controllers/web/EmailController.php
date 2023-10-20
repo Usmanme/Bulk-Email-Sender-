@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 use App\Models\Document;
+use App\Models\EmailFile;
 use Illuminate\Support\Facades\Auth;
 
 use App\Events\EmailFileImported;
@@ -77,8 +78,15 @@ class EmailController extends Controller
             'file' => 'required',
         ]);
         $file = $request->file('file');
-        $fileName = uniqid('document_') . '.' . $file->getClientOriginalExtension();
+        $extension = $file->getClientOriginalExtension();
+        $fileName = uniqid('document_') . '.' . $extension;
         Storage::disk('public')->put('email_files/'.$fileName, file_get_contents($file));
+
+        $email_file = new EmailFile;
+        $email_file->user_id = Auth::user()->id;
+        $email_file->file_name = $fileName;
+        $email_file->file_extension = $extension;
+        $email_file->save();
 
         event (new EmailFileImported($fileName));
         return redirect()->back()->with('success', 'Files uploaded successfully.');
