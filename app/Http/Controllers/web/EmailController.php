@@ -79,6 +79,7 @@ class EmailController extends Controller
         ]);
         $file = $request->file('file');
         $extension = $file->getClientOriginalExtension();
+        $originalFileName = $file->getClientOriginalName();
         $fileName = uniqid('document_') . '.' . $extension;
         Storage::disk('public')->put('email_files/'.$fileName, file_get_contents($file));
 
@@ -86,6 +87,7 @@ class EmailController extends Controller
         $email_file->user_id = Auth::user()->id;
         $email_file->file_name = $fileName;
         $email_file->file_extension = $extension;
+        $email_file->original_file_name = $originalFileName;
         $email_file->save();
 
         event (new EmailFileImported($fileName));
