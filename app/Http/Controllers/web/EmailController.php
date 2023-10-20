@@ -4,8 +4,14 @@ namespace App\Http\Controllers\web;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+
 use App\Models\Document;
 use Illuminate\Support\Facades\Auth;
+
+use App\Events\EmailFileImported;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
+
 
 class EmailController extends Controller
 {
@@ -67,6 +73,22 @@ class EmailController extends Controller
 
     public function importFile(Request $request)
     {
-        dd("Here Done");
+        $this->validate($request, [
+            'file' => 'required',
+        ]);
+        $file = $request->file('file');
+        $fileName = uniqid('document_') . '.' . $file->getClientOriginalExtension();
+        Storage::disk('public')->put($fileName, file_get_contents($file));
+
+        event (new EmailFileImported($fileName));
+        return redirect()->back()->with('success', 'Files uploaded successfully.');
+
     }
+
+    public function history()
+    {
+        return view('app.email.history');
+
+    }
+
 }
