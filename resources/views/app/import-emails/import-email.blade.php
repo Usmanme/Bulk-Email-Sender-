@@ -38,14 +38,40 @@
 @endsection
 
 @section('content')
-    <div class="card-body">
+    <div class="card">
         <form action="{{ route('send-email.importFile') }}" method="POST" enctype="multipart/form-data">
-            {{ csrf_field() }}
+            <div class="card-header">
+            </div>
+
+            <div class="card-body">
+
+                @csrf
+                
+                <div class="mb-3">
+                    <label for="formFileMultiple" class="form-label">Attach Your Documents</label>
+                    <input class="form-control" type="file" id="formFileMultiple" name="file">
+                </div>
+
+            </div>
+
+            <div class="card-footer d-flex align-items-center justify-content-end">
+                <button type="submit" class="btn btn-relief-outline-success waves-effect waves-float waves-light me-1">
+                    <i data-feather='save'></i>
+                    Upload
+                </button>
+                <a
+                    class="btn btn-relief-outline-danger waves-effect waves-float waves-light">
+                    <i data-feather='x'></i>
+                    Cancel
+                </a>
+            </div>
+
+            {{-- {{ csrf_field() }}
             <input type="file" name="file" class="form-control">
             <br>
-            <button class="btn btn-primary">Submit</button>
+            <button class="btn btn-primary">Submit</button> --}}
         </form>
-    </div>
+    {{-- </div> --}}
 @endsection
 
 @section('vendor-js')
