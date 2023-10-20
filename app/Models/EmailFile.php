@@ -15,4 +15,14 @@ class EmailFile extends Model
     
     protected $dates = ['deleted_at'];
 
+    public function emails()
+    {
+        return $this->hasMany(Email::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
 }

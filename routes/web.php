@@ -47,5 +47,5 @@ Route::group(
 );
 
 
-Route::get('/read', [EmailController::class, 'read'])->name('read');
+Route::get('/test', [EmailController::class, 'test'])->name('test');
 

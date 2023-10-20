@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 
 use App\Models\Document;
 use App\Models\EmailFile;
+use App\Models\Email;
 use Illuminate\Support\Facades\Auth;
 
 use App\Events\EmailFileImported;
