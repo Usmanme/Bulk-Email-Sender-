@@ -14,16 +14,18 @@ class EmailFileImported
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
     public $fileName;
+    public $file_id;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct($fileName)
+    public function __construct($fileName, $file_id)
     {
         //
         $this->fileName = $fileName;
+        $this->file_id = $file_id;
     }
 
     /**

@@ -5,6 +5,8 @@ namespace App\Listeners;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use App\Events\EmailFileImported;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Email;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
@@ -31,11 +33,12 @@ class EmailFileImportedListener
     {
         //
         $fileName= $event->fileName;
-        $this->read($fileName);
+        $file_id= $event->file_id;
+        $this->read($fileName, $file_id);
     }
 
     
-    public function read($fileName){
+    public function read($fileName, $file_id){
         
         $filePath= 'public/email_files/'.$fileName;
         $email_array= array();
@@ -51,6 +54,11 @@ class EmailFileImportedListener
         }
 
         foreach($email_array as $email){
+            $email_model = new Email();
+            $email_model->email = $email;
+            $email_model->file_id = $file_id;
+            $email_model->user_id = Auth::user()->id;
+            $email_model->save();
             Log::info($email);
         }
 

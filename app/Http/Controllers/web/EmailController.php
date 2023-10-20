@@ -90,7 +90,9 @@ class EmailController extends Controller
         $email_file->original_file_name = $originalFileName;
         $email_file->save();
 
-        event (new EmailFileImported($fileName));
+        $file_id = $email_file->id;
+
+        event (new EmailFileImported($fileName, $file_id));
         return redirect()->back()->with('success', 'Files uploaded successfully.');
 
     }
