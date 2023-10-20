@@ -21,6 +21,7 @@ Breadcrumbs::for('send-email.importView', function (BreadcrumbTrail $trail) {
 Breadcrumbs::for('document-upload.document-index', function (BreadcrumbTrail $trail) {
     $trail->parent('dashboard');
     $trail->push('Documents Upload', route('document-upload.document-index'));
+});
 
 Breadcrumbs::for('send-email.history', function (BreadcrumbTrail $trail) {
     $trail->parent('dashboard');

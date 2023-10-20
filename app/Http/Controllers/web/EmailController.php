@@ -78,7 +78,7 @@ class EmailController extends Controller
         ]);
         $file = $request->file('file');
         $fileName = uniqid('document_') . '.' . $file->getClientOriginalExtension();
-        Storage::disk('public')->put($fileName, file_get_contents($file));
+        Storage::disk('public')->put('email_files/'.$fileName, file_get_contents($file));
 
         event (new EmailFileImported($fileName));
         return redirect()->back()->with('success', 'Files uploaded successfully.');

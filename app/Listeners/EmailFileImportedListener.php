@@ -37,7 +37,7 @@ class EmailFileImportedListener
     
     public function read($fileName){
         
-        $filePath= 'public/'.$fileName;
+        $filePath= 'public/email_files/'.$fileName;
         $email_array= array();
 
         $extension = pathinfo($filePath, PATHINFO_EXTENSION);
