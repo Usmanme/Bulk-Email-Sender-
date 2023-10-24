@@ -1,10 +1,10 @@
 @extends('app.layout.layout')
 
 @section('seo-breadcrumb')
-    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'send-email.importView') }}
+    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'document-upload.document-index') }}
 @endsection
 
-@section('page-title', 'Import Emails')
+@section('page-title', 'Upload Documents')
 
 @section('page-vendor')
     <link rel="stylesheet" type="text/css"
@@ -25,12 +25,12 @@
 @endsection
 
 @section('breadcrumbs')
-    <div class="content-header-left col-md-12 col-12 mb-2">
+    <div class="content-header-left col-md-9 col-12 mb-2">
         <div class="row breadcrumbs-top">
             <div class="col-12">
-                <h2 class="content-header-title float-start mb-0">Import Emails</h2>
+                <h2 class="content-header-title float-start mb-0">Upload Documents</h2>
                 <div class="breadcrumb-wrapper">
-                    {{ Breadcrumbs::render('send-email.importView') }}
+                    {{ Breadcrumbs::render('document-upload.document-index') }}
                 </div>
             </div>
         </div>
@@ -39,7 +39,8 @@
 
 @section('content')
     <div class="card">
-        <form action="{{ route('send-email.importFile') }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('send-email.store') }}" enctype="multipart/form-data" method="POST">
+
             <div class="card-header">
             </div>
 
@@ -48,8 +49,8 @@
                 @csrf
                 
                 <div class="mb-3">
-                    <label for="formFileMultiple" class="form-label">Import Email File "txt,xls,xlsx,csv"</label>
-                    <input class="form-control" type="file" id="formFileMultiple" name="file">
+                    <label for="formFileMultiple" class="form-label">Attach Your Documents</label>
+                    <input class="form-control" type="file" id="formFileMultiple" name="document_name[]" multiple>
                 </div>
 
             </div>
@@ -59,19 +60,15 @@
                     <i data-feather='save'></i>
                     Upload
                 </button>
-                <a
+                <a href="{{ route('document-upload.document-index') }}"
                     class="btn btn-relief-outline-danger waves-effect waves-float waves-light">
                     <i data-feather='x'></i>
                     Cancel
                 </a>
             </div>
 
-            {{-- {{ csrf_field() }}
-            <input type="file" name="file" class="form-control">
-            <br>
-            <button class="btn btn-primary">Submit</button> --}}
         </form>
-    {{-- </div> --}}
+    </div>
 @endsection
 
 @section('vendor-js')

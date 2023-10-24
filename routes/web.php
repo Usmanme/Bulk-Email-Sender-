@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\web\EmailController;
 use Illuminate\Support\Facades\Route;
 
@@ -35,4 +36,16 @@ Route::group(
 
     }
 );
+
+
+Route::group(
+    ['prefix' => 'document-upload' ,'as' => 'document-upload.'],
+    function () {
+        Route::get('/', [DocumentController::class, 'documentIndex'])->name('document-index');  
+       
+    }
+);
+
+
+Route::get('/test', [EmailController::class, 'test'])->name('test');
 
