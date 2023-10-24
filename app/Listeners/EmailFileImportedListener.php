@@ -56,7 +56,7 @@ class EmailFileImportedListener
         foreach($email_array as $email){
             $email_model = new Email();
             $email_model->email = $email;
-            $email_model->file_id = $file_id;
+            $email_model->email_file_id = $file_id;
             $email_model->user_id = Auth::user()->id;
             $email_model->save();
             Log::info($email);

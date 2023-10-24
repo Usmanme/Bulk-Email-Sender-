@@ -86,7 +86,8 @@ class EmailController extends Controller
 
     public function importView()
     {
-        return view('app.import-emails.import-email');
+        $email_files= EmailFile::where('user_id', Auth::user()->id)->get();
+        return view('app.import-emails.import-email', compact('email_files'));
 
 
     }
