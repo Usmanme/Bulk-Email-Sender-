@@ -116,7 +116,6 @@ class EmailController extends Controller
 
         $email_file = new EmailFile;
         $email_file->user_id = Auth::user()->id;
-        $email_file->file_name = $fileName;
         $email_file->file_extension = $extension;
         $email_file->original_file_name = $originalFileName;
         $email_file->save();
@@ -138,37 +137,39 @@ class EmailController extends Controller
         }
 
         $file_path = 'email_files/' . $file->file_name;
-        Storage::disk('public')->delete($file_path);
 
         $file->delete();
 
         return redirect()->back()->with('success', 'Files deleted successfully.');
     }
 
-    public function download_file($id)
-    {
+
+    public function download_file($id) {
+       
         $file = EmailFile::find($id);
-        $filename = $file->file_name;
-        $original_name= $file->original_file_name;
+        $user_id = Auth::user()->id;
+        $file_user_id = $file->user_id;
+        $original_name = $file->original_file_name;
+        $extension = $file->file_extension;
 
-        $filePath = 'email_files/' . $filename;
+        if($user_id != $file_user_id){
+            return response()->json(['error' => 'No such File.'], 404);
+        }
 
-        // Check if the file exists
-        if (Storage::disk('public')->exists($filePath)) {
-            $file = Storage::disk('public')->get($filePath);
-
-            // Set the appropriate HTTP headers for the download
+        if($extension == 'txt'){
+            $emails = $file->emails->pluck('email')->toArray();
+       
+            $emailString = implode(PHP_EOL, $emails);
+    
             $headers = [
-                'Content-Type' => Storage::disk('public')->mimeType($filePath),
+                'Content-Type' => 'text/plain',
                 'Content-Disposition' => 'attachment; filename="' . $original_name . '"',
             ];
-
-            // Return the file as a response
-            return response($file, 200, $headers);
-        } else {
-            // Handle the case where the file does not exist
-            return response()->json(['error' => 'File not found'], 404);
+            Log::info('line 202');
+    
+            return response($emailString, 200, $headers);
         }
+
     }
 
     public function delete_email($emailId) {

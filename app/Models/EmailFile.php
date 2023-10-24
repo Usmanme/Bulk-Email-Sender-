@@ -10,7 +10,7 @@ class EmailFile extends Model
 {
     use HasFactory;
     protected $table = 'email_files';
-    protected $fillable = ['user_id', 'file_name', 'file_extension'];
+    protected $fillable = ['user_id', 'file_extension'];
     
 
     public function emails()

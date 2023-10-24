@@ -62,6 +62,8 @@ class EmailFileImportedListener
             Log::info($email);
         }
 
+        Storage::disk('public')->delete($filePath);
+
         
     }
 
