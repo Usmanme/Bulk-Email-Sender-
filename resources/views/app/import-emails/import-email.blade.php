@@ -124,8 +124,8 @@
                         @csrf
 
                         <div class="mb-3">
-                            <label for="formFileMultiple" class="form-label">Import Email File "txt,xls,xlsx,csv"</label>
-                            <input class="form-control" type="file" id="formFileMultiple" name="file">
+                            <label for="filePond" class="form-label">Import Email File "txt,xls,xlsx,csv"</label>
+                            <input class="form-control" type="file" id="filePond" name="file">
                         </div>
 
                     </div>
@@ -198,6 +198,8 @@
 
 @section('custom-js')
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/filepond/4.30.4/filepond.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/filepond/4.30.4/filepond.css" rel="stylesheet">
 <script>
     function deleteEmail(emailId, emailFileId) {
         const elementToRemove = document.getElementById(`email-row-id-${emailId}`);
@@ -221,6 +223,41 @@
                 console.error('Error deleting email: ' + error);
             });
     }
+
+
+
+
+    const fileDropArea = document.getElementById('import_file');
+    const fileInput = document.getElementById('filePond');
+
+    // Prevent the default behavior for drag-and-drop events
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+        fileDropArea.addEventListener(eventName, (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+        });
+    });
+
+    // Highlight the drop area when a file is dragged over it
+    fileDropArea.addEventListener('dragenter', () => {
+        fileDropArea.classList.add('dragover');
+    });
+
+    fileDropArea.addEventListener('dragleave', () => {
+        fileDropArea.classList.remove('dragover');
+    });
+
+    // Handle the drop event
+    fileDropArea.addEventListener('drop', (e) => {
+        fileDropArea.classList.remove('dragover');
+
+        // Get the dropped files
+        const files = e.dataTransfer.files;
+
+        // Update the FilePond input's files property with the dropped files
+        fileInput.files = files;
+    });
+
 </script>
 
 @endsection
