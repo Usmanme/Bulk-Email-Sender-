@@ -24,6 +24,24 @@ class EmailController extends Controller
 
     }
 
+    public function send(Request $request)
+    {
+
+
+        $this->validate($request, [
+            'subject' => 'required|string',
+            'body' => 'required|string',
+        ]);
+
+        try {
+            Mail::to('usman.islootech@gmail.com')->send(new SendMail($request->subject, $request->body, $request->name));
+
+            return back()->withSuccess('Email Sent Successfully!..');
+        } catch (Exception $ex) {
+            return back()->withDanger('Something went wrong!' . ' ' . $ex->getMessage());
+        }
+    }
+
     
     public function store(Request $request)
     {
