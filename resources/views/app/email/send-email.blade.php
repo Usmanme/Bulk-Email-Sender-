@@ -39,7 +39,7 @@
 
 @section('content')
     <div class="card">
-        <form action="{{ route('send-email.store') }}" method="POST">
+        <form action="{{ route('send-email.send') }}" method="POST">
 
             <div class="card-header">
             </div>
@@ -53,7 +53,7 @@
                 </div>
                 <div class="form-group">
                     <label for="subject">Email Subject</label>
-                    <input type="email" id="subject" name="subject" class="form-control" required="">
+                    <input type="text" id="subject" name="subject" class="form-control" required="">
                 </div>
                 <div class="form-group">
                     <label for="description">Description</label>
