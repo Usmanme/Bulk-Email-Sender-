@@ -83,7 +83,7 @@
                                         <i data-feather="edit-2" class="me-50"></i>
                                         <span>Emails</span>
                                       </a>
-                                      <a class="dropdown-item" href="#">
+                                      <a class="dropdown-item" href="{{ route('send-email.download-file', ['id' => $email_file->id]) }}">
                                         <i data-feather="edit-2" class="me-50"></i>
                                         <span>Download</span>
                                       </a>
