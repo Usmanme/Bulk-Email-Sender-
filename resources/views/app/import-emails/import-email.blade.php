@@ -41,7 +41,7 @@
 
 
     <div class="card">
-        <div class="table-responsive">
+        <div class="table-responsive" style="min-height: 500px">
             <div class="m-2">
                 <button class="btn btn-primary waves-effect waves-float waves-light" data-bs-target="#import_file"
                     data-bs-toggle="modal">
@@ -87,7 +87,7 @@
                                         <i data-feather="edit-2" class="me-50"></i>
                                         <span>Download</span>
                                       </a>
-                                      <a class="dropdown-item" href="#">
+                                      <a class="dropdown-item" href="{{ route('send-email.delete-file', ['id' => $email_file->id]) }}">
                                         <i data-feather="trash" class="me-50"></i>
                                         <span>Delete</span>
                                       </a>

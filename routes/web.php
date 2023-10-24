@@ -29,6 +29,7 @@ Route::group(
     ['prefix' => 'send-email', 'as' => 'send-email.'],
     function () {
         Route::get('/', [EmailController::class, 'index'])->name('index');
+        Route::get('/delete-file/{id}', [EmailController::class, 'delete_file'])->name('delete-file');
         Route::post('/send', [EmailController::class, 'send'])->name('send');
         Route::get('/import-email-view', [EmailController::class, 'importView'])->name('importView');
         Route::post('/import-file', [EmailController::class, 'importFile'])->name('importFile');

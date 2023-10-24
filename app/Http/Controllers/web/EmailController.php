@@ -92,6 +92,23 @@ class EmailController extends Controller
 
     }
 
+    public function delete_file($id){
+
+        $file= EmailFile::find($id);
+        $emails= $file->emails;
+        
+        foreach($emails as $email){
+            $email->delete();
+        }
+
+        $file_path = 'email_files/' . $file->file_name;
+        Storage::disk('public')->delete($file_path);
+
+        $file->delete();
+
+        return redirect()->back()->with('success', 'Files deleted successfully.');
+    }
+
     public function history()
     {
         return view('app.email.history');
