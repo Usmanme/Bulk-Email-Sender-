@@ -80,11 +80,12 @@
                                     </button>
                                     <div class="dropdown-menu dropdown-menu-end">
                                       <a class="dropdown-item" href="#">
-                                        <i data-feather="edit-2" class="me-50"></i>
-                                        <span>Emails</span>
+                                        <i data-feather="list" class="me-50"></i>
+                                            <span data-bs-target="#email_list{{$email_file->id}}"
+                                            data-bs-toggle="modal">Emails</span>
                                       </a>
                                       <a class="dropdown-item" href="{{ route('send-email.download-file', ['id' => $email_file->id]) }}">
-                                        <i data-feather="edit-2" class="me-50"></i>
+                                        <i data-feather="download" class="me-50"></i>
                                         <span>Download</span>
                                       </a>
                                       <a class="dropdown-item" href="{{ route('send-email.delete-file', ['id' => $email_file->id]) }}">
@@ -105,11 +106,6 @@
     <div class="modal fade" id="import_file" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered modal-edit-user">
             <div class="modal-content">
-                {{-- <div class="modal-header bg-transparent">
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div> --}}
-                {{-- <div class="modal-body pb-5 px-sm-5 pt-50"> --}}
-                {{-- <div class="card"> --}}
                 <form action="{{ route('send-email.importFile') }}" method="POST" enctype="multipart/form-data">
                     <div class="card-header">
                     </div>
@@ -139,11 +135,42 @@
                     </div>
 
                 </form>
-                {{-- </div> --}}
-                {{-- </div> --}}
             </div>
         </div>
     </div>
+
+    @foreach($email_files as $email_file)
+    <div class="modal fade" id="email_list{{$email_file->id}}" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-edit-user">
+          <div class="modal-content">
+            <div class="modal-header bg-transparent">
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body pb-5 px-sm-5 pt-50">
+              <div class="text-center mb-2">
+                <h4 class="mb-1">{{$email_file->original_file_name}}</h4>
+              </div>
+              <table class="table">
+                <thead>
+                    <tr>
+                        <th>Email</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($email_file->emails as $email)
+                        <tr>
+                            <td>
+                                {{ $email->email }}
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      @endforeach
 @endsection
 
 @section('vendor-js')
