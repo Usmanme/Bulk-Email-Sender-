@@ -36,6 +36,8 @@ Route::group(
         Route::post('/import-file', [EmailController::class, 'importFile'])->name('importFile');
         Route::get('/history', [EmailController::class, 'history'])->name('history');
         Route::delete('/delete-email/{email}', [EmailController::class, 'delete_email'])->name('delete-email');
+        Route::post('/store', [EmailController::class, 'store'])->name('store');
+
 
 
     }
