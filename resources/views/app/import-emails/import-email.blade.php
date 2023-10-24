@@ -76,7 +76,7 @@
                             <td>
                                 {{ $email_file->original_file_name }}
                             </td>
-                            <td>
+                            <td id="email_count_{{$email_file->id}}">
                                 {{ $email_file->emails->count() }}
                             </td>
                             <td>
@@ -173,7 +173,7 @@
                                 {{ $email->email }}
                             </td>
                             <td>
-                                <a href="javascript:void(0);" onclick="deleteEmail({{$email->id}})">
+                                <a href="javascript:void(0);" onclick="deleteEmail({{$email->id}}, {{$email_file->id}})">
                                     <i data-feather="trash" class="me-50"></i>
                                 </a>
                             </td>
@@ -199,20 +199,21 @@
 @section('custom-js')
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script>
-    function deleteEmail(emailId) {
+    function deleteEmail(emailId, emailFileId) {
+        const elementToRemove = document.getElementById(`email-row-id-${emailId}`);
+
+        elementToRemove.classList.add('smooth-remove');
+        elementToRemove.addEventListener('transitionend', function () {
+        elementToRemove.remove();
         // Make an AJAX request to the Laravel route
         axios.delete(`/send-email/delete-email/${emailId}`)
             .then(response => {
                 // Handle the response from the server, e.g., show a success message
                 console.log('Email deleted successfully');
-                const elementToRemove = document.getElementById(`email-row-id-${emailId}`);
-
-                // Add the smooth-remove class to trigger the animation
-                elementToRemove.classList.add('smooth-remove');
-
-                // Listen for the 'transitionend' event to remove the element after the animation is complete
-                elementToRemove.addEventListener('transitionend', function () {
-                elementToRemove.remove();
+                
+                const emailCountElement = document.getElementById(`email_count_${emailFileId}`);
+                emailCountElement.innerHTML = parseInt(emailCountElement.innerHTML) - 1;
+                
                 });            
             })
             .catch(error => {
