@@ -62,7 +62,7 @@ class EmailFileImportedListener
             Log::info($email);
         }
 
-        Storage::disk('public')->delete($filePath);
+        Storage::disk('public')->delete('email_files/'.$fileName);
 
         
     }

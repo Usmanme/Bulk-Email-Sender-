@@ -125,7 +125,7 @@
 
                         <div class="mb-3">
                             <label for="filePond" class="form-label">Import Email File "txt,xls,xlsx,csv"</label>
-                            <input class="form-control" type="file" id="filePond" name="file">
+                            <input class="form-control" type="file" id="filePond" name="file[]" multiple>
                         </div>
 
                     </div>

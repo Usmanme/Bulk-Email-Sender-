@@ -106,24 +106,39 @@ class EmailController extends Controller
     public function importFile(Request $request)
     {
         $this->validate($request, [
-            'file' => 'required',
+            'file.*' => 'required',
         ]);
-        $file = $request->file('file');
-        $extension = $file->getClientOriginalExtension();
-        $originalFileName = $file->getClientOriginalName();
-        $fileName = uniqid('document_') . '.' . $extension;
-        Storage::disk('public')->put('email_files/' . $fileName, file_get_contents($file));
+        $files = $request->file('file');
+        $user_id = Auth::user()->id;
 
-        $email_file = new EmailFile;
-        $email_file->user_id = Auth::user()->id;
-        $email_file->file_extension = $extension;
-        $email_file->original_file_name = $originalFileName;
-        $email_file->save();
+        foreach($files as $file){
 
-        $file_id = $email_file->id;
+            $extension = $file->getClientOriginalExtension();
+            $originalFileName = $file->getClientOriginalName();
 
-        event(new EmailFileImported($fileName, $file_id));
+            $existing_email_files = EmailFile::where('user_id', Auth::user()->id);
+
+            foreach($existing_email_files as $existing_email_file){
+                if($originalFileName == $existing_email_file->original_file_name){
+                    $existing_email_file->delete();
+                }
+            }
+            
+            $email_file = new EmailFile;
+            $email_file->user_id = $user_id;
+            $email_file->file_extension = $extension;
+            $email_file->original_file_name = $originalFileName;
+            $email_file->save();
+
+            $fileName = uniqid('document_') . '.' . $extension;
+            Storage::disk('public')->put('email_files/' . $fileName, file_get_contents($file));
+
+            $file_id = $email_file->id;
+
+            event(new EmailFileImported($fileName, $file_id));
+        }
         return redirect()->back()->with('success', 'Files uploaded successfully.');
+
     }
 
     public function delete_file($id)
