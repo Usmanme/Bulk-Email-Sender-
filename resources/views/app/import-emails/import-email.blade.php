@@ -22,6 +22,15 @@
 @endsection
 
 @section('custom-css')
+<style>
+    .smooth-remove {
+  opacity: 0;
+  transform: scale(0);
+  transition: opacity 0.5s, transform 0.5s;
+  /* You can adjust the duration and transition properties as needed */
+}
+
+</style>
 @endsection
 
 @section('breadcrumbs')
@@ -79,11 +88,11 @@
                                       <i data-feather="more-vertical"></i>
                                     </button>
                                     <div class="dropdown-menu dropdown-menu-end">
-                                      <a class="dropdown-item" href="#">
-                                        <i data-feather="list" class="me-50"></i>
-                                            <span data-bs-target="#email_list{{$email_file->id}}"
-                                            data-bs-toggle="modal">Emails</span>
-                                      </a>
+                                        <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#email_list{{$email_file->id}}">
+                                            <i data-feather="list" class="me-50"></i>
+                                            <span>Emails</span>
+                                        </a>
+                                        
                                       <a class="dropdown-item" href="{{ route('send-email.download-file', ['id' => $email_file->id]) }}">
                                         <i data-feather="download" class="me-50"></i>
                                         <span>Download</span>
@@ -154,13 +163,19 @@
                 <thead>
                     <tr>
                         <th>Email</th>
+                        <th>Delete</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($email_file->emails as $email)
-                        <tr>
+                        <tr class="email-row" id="email-row-id-{{$email->id}}">
                             <td>
                                 {{ $email->email }}
+                            </td>
+                            <td>
+                                <a href="javascript:void(0);" onclick="deleteEmail({{$email->id}})">
+                                    <i data-feather="trash" class="me-50"></i>
+                                </a>
                             </td>
                         </tr>
                     @endforeach
@@ -182,4 +197,29 @@
 @endsection
 
 @section('custom-js')
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+    function deleteEmail(emailId) {
+        // Make an AJAX request to the Laravel route
+        axios.delete(`/send-email/delete-email/${emailId}`)
+            .then(response => {
+                // Handle the response from the server, e.g., show a success message
+                console.log('Email deleted successfully');
+                const elementToRemove = document.getElementById(`email-row-id-${emailId}`);
+
+                // Add the smooth-remove class to trigger the animation
+                elementToRemove.classList.add('smooth-remove');
+
+                // Listen for the 'transitionend' event to remove the element after the animation is complete
+                elementToRemove.addEventListener('transitionend', function () {
+                elementToRemove.remove();
+                });            
+            })
+            .catch(error => {
+                // Handle errors, e.g., show an error message
+                console.error('Error deleting email: ' + error);
+            });
+    }
+</script>
+
 @endsection

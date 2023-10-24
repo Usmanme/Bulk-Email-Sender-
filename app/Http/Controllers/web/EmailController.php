@@ -133,6 +133,12 @@ class EmailController extends Controller
         }
     }
 
+    public function delete_email($emailId) {
+        $email = Email::find($emailId);
+        $email->delete();
+        return response()->json(['success' => 'Email deleted successfully.'], 200);
+        }
+
     public function history()
     {
         return view('app.email.history');
