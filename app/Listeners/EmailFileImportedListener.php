@@ -40,6 +40,8 @@ class EmailFileImportedListener
 
     
     public function read($fileName, $file_id){
+
+        $email_array = array();
         
         $filePath= 'public/email_files/'.$fileName;
 
@@ -50,6 +52,12 @@ class EmailFileImportedListener
         }
         elseif($extension == 'xlsx' || $extension == 'xls'){
             $email_array= $this->read_xlsx_emails($filePath);
+        }
+        elseif($extension == 'csv'){
+            $email_array= $this->read_csv_emails($filePath);
+        }
+        else{
+            Log::info('File extension not supported.');
         }
 
         foreach($email_array as $email){
@@ -64,6 +72,34 @@ class EmailFileImportedListener
         Storage::disk('public')->delete('email_files/'.$fileName);
 
         
+    }
+
+    public function read_csv_emails($filePath){
+            
+            $filePathNew = storage_path('app/'. $filePath);
+    
+            $file = fopen($filePathNew, "r");
+            $email_array = array();
+    
+            while (($row = fgetcsv($file, 10000, ",")) !== FALSE) {
+                foreach ($row as $cell) {
+                    $count = substr_count($cell, "@");
+            
+                    if ($count > 1) {
+                        $email_array = $this->multiple_email_in_line($cell, $email_array);
+                    } else {
+                        $cell = str_replace(' ', '', $cell);
+                        $email_array[] = $cell;
+                    }
+                }
+            }
+            
+    
+            fclose($file);
+    
+            $email_array = $this->extra_handling($email_array);
+    
+            return $email_array;
     }
 
     public function read_xlsx_emails($filePath){
