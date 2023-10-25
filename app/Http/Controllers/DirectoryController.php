@@ -104,12 +104,31 @@ class DirectoryController extends Controller
                 'Content-Type' => 'text/plain',
                 'Content-Disposition' => 'attachment; filename="' . $original_name . '"',
             ];
-            Log::info('line 202');
     
             return response($emailString, 200, $headers);
         }
+        elseif($extension == 'csv'){
+            $emails = $file->emails->pluck('email')->toArray();
+            $emails = array_map(function($email){
+                return [$email];
+            }, $emails);
+            array_unshift($emails);
+            $file = fopen('php://temp', 'r+');
+            foreach ($emails as $email) {
+                fputcsv($file, $email);
+            }
+            rewind($file);
+            $csv = stream_get_contents($file);
+            fclose($file);
+            $headers = [
+                'Content-Type' => 'text/csv',
+                'Content-Disposition' => 'attachment; filename="' . $original_name . '"',
+            ];
+            return response($csv, 200, $headers);
+        }
 
     }
+    
 
     public function delete_email($emailId) {
         try{
@@ -119,7 +138,7 @@ class DirectoryController extends Controller
             $email_user_id = $email->email_file->user_id;
 
             if($user_id != $email_user_id){
-                return response()->json(['error' => 'No such File.'], 404);
+                return response()->json(['error' => 'No such Email.'], 404);
             }
 
             if($email){
