@@ -218,10 +218,6 @@
                 
                 });            
             })
-            .catch(error => {
-                // Handle errors, e.g., show an error message
-                console.error('Error deleting email: ' + error);
-            });
     }
 
 

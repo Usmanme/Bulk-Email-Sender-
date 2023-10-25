@@ -108,11 +108,15 @@ class DirectoryController extends Controller
     }
 
     public function delete_email($emailId) {
-        Log::info($emailId);
-        $email = Email::find($emailId);
-        Log::info($email);
-        $email->delete();
-        return response()->json(['success' => 'Email deleted successfully.'], 200);
+        try{
+            $email = Email::findorfail($emailId);
+            if($email){
+                $email->delete();
+            }
+        }catch(\Exception $e){
+            Log::info($e->getMessage());
         }
+        return response()->json(['success' => 'Email deleted successfully.'], 200);
+    }
 
 }
