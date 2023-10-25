@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DocumentController;
+use App\Http\Controllers\DirectoryController;
 use App\Http\Controllers\web\EmailController;
 use Illuminate\Support\Facades\Route;
 
@@ -29,20 +30,24 @@ Route::group(
     ['prefix' => 'send-email', 'as' => 'send-email.'],
     function () {
         Route::get('/', [EmailController::class, 'index'])->name('index');
-        Route::get('/delete-file/{id}', [EmailController::class, 'delete_file'])->name('delete-file');
-        Route::get('/download-file/{id}', [EmailController::class, 'download_file'])->name('download-file');
+
         Route::post('/send', [EmailController::class, 'send'])->name('send');
-        Route::get('/import-email-view', [EmailController::class, 'importView'])->name('importView');
-        Route::post('/import-file', [EmailController::class, 'importFile'])->name('importFile');
         Route::get('/history', [EmailController::class, 'history'])->name('history');
-        Route::delete('/delete-email/{email}', [EmailController::class, 'delete_email'])->name('delete-email');
         Route::post('/store', [DocumentController::class, 'store'])->name('store');
-
-
-
     }
 );
 
+Route::group(
+    ['prefix' => 'directory', 'as' => 'directory.'],
+    function () {
+        
+        Route::get('/delete-file/{id}', [DirectoryController::class, 'delete_file'])->name('delete-file');
+        Route::get('/download-file/{id}', [DirectoryController::class, 'download_file'])->name('download-file');
+        Route::delete('/delete-email/{email}', [DirectoryController::class, 'delete_email'])->name('delete-email');
+        Route::get('/import-email-view', [DirectoryController::class, 'importView'])->name('importView');
+        Route::post('/import-file', [DirectoryController::class, 'importFile'])->name('importFile');
+    }
+);
 
 Route::group(
     ['prefix' => 'document-upload' ,'as' => 'document-upload.'],

@@ -70,7 +70,7 @@
                 <i data-feather="more-horizontal"></i>
             </li>
             <li class="nav-item {{ request()->routeIs('send-email.importView') ? 'active hover_text__white' : null }}">
-                <a class="d-flex align-items-center" href="{{ route('send-email.importView') }}">
+                <a class="d-flex align-items-center" href="{{ route('directory.importView') }}">
                     <i data-feather='circle'></i>
                     <span class="menu-item text-truncate" data-i18n="Feed Usage">Directory</span>
                 </a>

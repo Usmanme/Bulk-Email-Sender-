@@ -12,9 +12,9 @@ Breadcrumbs::for('send-email.index', function (BreadcrumbTrail $trail) {
     $trail->parent('dashboard');
     $trail->push('Send Email', route('send-email.index'));
 });
-Breadcrumbs::for('send-email.importView', function (BreadcrumbTrail $trail) {
+Breadcrumbs::for('directory.importView', function (BreadcrumbTrail $trail) {
     $trail->parent('dashboard');
-    $trail->push('Import Emails', route('send-email.importView'));
+    $trail->push('Import Emails', route('directory.importView'));
 });
 
 

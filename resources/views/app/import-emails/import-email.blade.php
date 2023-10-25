@@ -1,7 +1,7 @@
 @extends('app.layout.layout')
 
 @section('seo-breadcrumb')
-    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'send-email.importView') }}
+    {{ Breadcrumbs::view('breadcrumbs::json-ld', 'directory.importView') }}
 @endsection
 
 @section('page-title', 'Import Emails')
@@ -39,7 +39,7 @@
             <div class="col-12">
                 <h2 class="content-header-title float-start mb-0">Import Emails</h2>
                 <div class="breadcrumb-wrapper">
-                    {{ Breadcrumbs::render('send-email.importView') }}
+                    {{ Breadcrumbs::render('directory.importView') }}
                 </div>
             </div>
         </div>
@@ -93,11 +93,11 @@
                                             <span>Emails</span>
                                         </a>
                                         
-                                      <a class="dropdown-item" href="{{ route('send-email.download-file', ['id' => $email_file->id]) }}">
+                                      <a class="dropdown-item" href="{{ route('directory.download-file', ['id' => $email_file->id]) }}">
                                         <i data-feather="download" class="me-50"></i>
                                         <span>Download</span>
                                       </a>
-                                      <a class="dropdown-item" href="{{ route('send-email.delete-file', ['id' => $email_file->id]) }}">
+                                      <a class="dropdown-item" href="{{ route('directory.delete-file', ['id' => $email_file->id]) }}">
                                         <i data-feather="trash" class="me-50"></i>
                                         <span>Delete</span>
                                       </a>
@@ -115,7 +115,7 @@
     <div class="modal fade" id="import_file" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered modal-edit-user">
             <div class="modal-content">
-                <form action="{{ route('send-email.importFile') }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('directory.importFile') }}" method="POST" enctype="multipart/form-data">
                     <div class="card-header">
                     </div>
 
@@ -208,7 +208,7 @@
         elementToRemove.addEventListener('transitionend', function () {
         elementToRemove.remove();
         // Make an AJAX request to the Laravel route
-        axios.delete(`/send-email/delete-email/${emailId}`)
+        axios.delete(`/directory/delete-email/${emailId}`)
             .then(response => {
                 // Handle the response from the server, e.g., show a success message
                 console.log('Email deleted successfully');
