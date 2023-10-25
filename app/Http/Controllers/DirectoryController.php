@@ -63,15 +63,19 @@ class DirectoryController extends Controller
 
     public function delete_file($id)
     {
+        $user_id = Auth::user()->id;
 
         $file = EmailFile::find($id);
         $emails = $file->emails;
+        $file_user_id = $file->user_id;
+
+        if($user_id != $file_user_id){
+            return response()->json(['error' => 'No such File.'], 404);
+        }
 
         foreach ($emails as $email) {
             $email->delete();
         }
-
-        $file_path = 'email_files/' . $file->file_name;
 
         $file->delete();
 
@@ -109,7 +113,15 @@ class DirectoryController extends Controller
 
     public function delete_email($emailId) {
         try{
+            
             $email = Email::findorfail($emailId);
+            $user_id = Auth::user()->id;
+            $email_user_id = $email->email_file->user_id;
+
+            if($user_id != $email_user_id){
+                return response()->json(['error' => 'No such File.'], 404);
+            }
+
             if($email){
                 $email->delete();
             }
