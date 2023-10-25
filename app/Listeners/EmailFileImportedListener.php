@@ -10,6 +10,7 @@ use App\Models\Email;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 
 class EmailFileImportedListener
 {
@@ -41,16 +42,14 @@ class EmailFileImportedListener
     public function read($fileName, $file_id){
         
         $filePath= 'public/email_files/'.$fileName;
-        $email_array= array();
 
         $extension = pathinfo($filePath, PATHINFO_EXTENSION);
 
         if ($extension === 'txt') {
             $email_array= $this->read_txt_emails($filePath);
         }
-        else{
-
-            Log::info('unable to handle the file type');
+        elseif($extension == 'xlsx' || $extension == 'xls'){
+            $email_array= $this->read_xlsx_emails($filePath);
         }
 
         foreach($email_array as $email){
@@ -65,6 +64,37 @@ class EmailFileImportedListener
         Storage::disk('public')->delete('email_files/'.$fileName);
 
         
+    }
+
+    public function read_xlsx_emails($filePath){
+
+        $filePathNew = storage_path('app/'. $filePath);
+
+        $spreadsheet = IOFactory::load($filePathNew);
+        $worksheet = $spreadsheet->getActiveSheet();
+        $email_array = array();
+
+        foreach ($worksheet->getRowIterator() as $row) {
+            foreach ($row->getCellIterator() as $cell) {
+                $cellValue = $cell->getValue();
+
+                if($cellValue!=null){
+                    $count = substr_count($cellValue, "@");
+
+                    if($count > 1){                
+                        $email_array = $this->multiple_email_in_line($cellValue, $email_array);
+                    }
+                    else{
+                        $cellValue = str_replace(' ', '', $cellValue);
+                        $email_array[] = $cellValue;
+                    }
+                }
+            }
+        }
+
+        $email_array = $this->extra_handling($email_array);
+        
+        return $email_array;
     }
 
     
@@ -89,16 +119,7 @@ class EmailFileImportedListener
                 }
             }
 
-            $email_array = array_filter($email_array, function($value) {
-                return $value !== ''; 
-            });
-
-            foreach ($email_array as &$email) {
-                $email = str_replace([' ', ','], '', $email);
-            }
-            
-            $email_array = array_unique($email_array);
-            
+            $email_array = $this->extra_handling($email_array);
 
             return $email_array;
             
@@ -106,6 +127,21 @@ class EmailFileImportedListener
             Log::info('File does not exist.');
         }
 
+    }
+
+    public function extra_handling($email_array){
+
+        $email_array = array_filter($email_array, function($value) {
+            return $value !== ''; 
+        });
+
+        foreach ($email_array as &$email) {
+            $email = str_replace([' ', ','], '', $email);
+        }
+        
+        $email_array = array_unique($email_array);
+        
+        return $email_array;
     }
 
     

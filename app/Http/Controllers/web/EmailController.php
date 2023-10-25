@@ -110,6 +110,7 @@ class EmailController extends Controller
         ]);
         $files = $request->file('file');
         $user_id = Auth::user()->id;
+        $success_message = 'Files uploaded successfully.'; 
 
         foreach($files as $file){
 
@@ -121,6 +122,7 @@ class EmailController extends Controller
             foreach($existing_email_files as $existing_email_file){
                 if($originalFileName == $existing_email_file->original_file_name){
                     $existing_email_file->delete();
+                    $success_message = 'Files uploaded and overwritten successfully.';
                 }
             }
             
@@ -137,7 +139,7 @@ class EmailController extends Controller
 
             event(new EmailFileImported($fileName, $file_id));
         }
-        return redirect()->back()->with('success', 'Files uploaded successfully.');
+        return redirect()->back()->with('success', $success_message);
 
     }
 
