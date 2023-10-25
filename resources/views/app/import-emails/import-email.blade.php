@@ -97,7 +97,7 @@
                                         <i data-feather="download" class="me-50"></i>
                                         <span>Download</span>
                                       </a>
-                                      <a class="dropdown-item" href="{{ route('directory.delete-file', ['id' => $email_file->id]) }}">
+                                      <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#delete_file{{$email_file->id}}">
                                         <i data-feather="trash" class="me-50"></i>
                                         <span>Delete</span>
                                       </a>
@@ -149,6 +149,39 @@
     </div>
 
     @foreach($email_files as $email_file)
+    <div class="modal fade" id="delete_file{{$email_file->id}}" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-edit-user">
+          <div class="modal-content">
+            <div class="modal-header bg-transparent">
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body pb-1 px-sm-5 pt-50">
+                <div class="text-center mb-2">
+                    <h5 class="mb-1">Are you sure you wish to delete {{$email_file->original_file_name}}?</h4>
+                  </div>
+                <div>
+                    <div class="text-center mb-2">
+                        <a href="{{ route('directory.delete-file', ['id' => $email_file->id]) }}">
+                            <button class="btn btn-danger mr-2">
+                                Delete
+                            </button>
+                        </a>
+                        <button class="btn btn-secondary" data-bs-dismiss="modal" style="margin-left: 15px;">
+                            Cancel
+                        </button>
+                    </div>
+                    
+                    </div>
+                </div>
+              
+              
+            </div>
+          </div>
+        </div>
+      </div>
+    @endforeach
+
+    @foreach($email_files as $email_file)
     <div class="modal fade" id="email_list{{$email_file->id}}" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered modal-edit-user">
           <div class="modal-content">
@@ -185,7 +218,7 @@
           </div>
         </div>
       </div>
-      @endforeach
+    @endforeach
 @endsection
 
 @section('vendor-js')
