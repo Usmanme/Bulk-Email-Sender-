@@ -3,6 +3,7 @@
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\DirectoryController;
+use App\Http\Controllers\TestController;
 use App\Http\Controllers\web\EmailController;
 use Illuminate\Support\Facades\Route;
 
@@ -48,6 +49,9 @@ Route::group(
         Route::post('/import-file', [DirectoryController::class, 'importFile'])->name('importFile');
     }
 );
+
+Route::get('/batch', [TestController::class, 'batch']);
+Route::get('/batch-status', [TestController::class, 'batch_status_2']);
 
 Route::group(
     ['prefix' => 'document-upload' ,'as' => 'document-upload.'],
