@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 use App\Models\EmailFile;
 use App\Models\Email;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Auth;
 use App\Events\EmailFileImported;
 use Illuminate\Support\Facades\Storage;
@@ -18,7 +20,52 @@ class DirectoryController extends Controller
     public function importView()
     {
         $email_files = EmailFile::where('user_id', Auth::user()->id)->get();
+        $user_id= Auth::user()->id;
+        $this->check_verification_status($user_id);
         return view('app.import-emails.import-email', compact('email_files'));
+    }
+
+    public function check_verification_status($id){
+
+        $currentDateTime = Carbon::now();
+        
+        $user_email_files = EmailFile::where('user_id', $id)
+        ->where('verification_end', '<', $currentDateTime)
+        ->where('verification', 'verifying')
+        ->get();
+     
+
+        foreach($user_email_files as $user_email_file){
+        
+            $api_key= "test_923437f149bad62c093b";
+            $base_url = "https://api.emailable.com/v1/";
+            $endpoint = "batch";
+
+            $batch_id = $user_email_file->batch_id;
+
+            $response = Http::get($base_url.'/'.$endpoint, [
+                'api_key' => $api_key,
+                'id' => $batch_id,
+            ]);
+
+            $message = $response->json()['message'];
+            if($message == "Batch verification completed."){
+                $user_email_file->verification = 'Verified';
+                $user_email_file->save();
+            }
+
+            $response_emails = $response->json()['emails'];
+            foreach($response_emails as $response_email){
+                $email = Email::where('email', $response_email['email'])->first();
+                if($email){
+                    $email->status = $response_email['state'];
+                    // TODO: add score as well
+                    $email->save();
+                }
+            }
+
+            Log::info(''.$response);
+        }
     }
 
     public function importFile(Request $request)
@@ -79,7 +126,7 @@ class DirectoryController extends Controller
 
         $file->delete();
 
-        return redirect()->back()->with('success', 'Files deleted successfully.');
+        return redirect()->back()->with('success', 'File deleted successfully.');
     }
 
 
