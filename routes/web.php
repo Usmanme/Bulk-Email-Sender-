@@ -46,6 +46,7 @@ Route::group(
         Route::get('/download-file/{id}', [DirectoryController::class, 'download_file'])->name('download-file');
         Route::delete('/delete-email/{email}', [DirectoryController::class, 'delete_email'])->name('delete-email');
         Route::get('/import-email-view', [DirectoryController::class, 'importView'])->name('importView');
+        Route::get('/verify/{id}', [DirectoryController::class, 'verify'])->name('verify');
         Route::post('/import-file', [DirectoryController::class, 'importFile'])->name('importFile');
     }
 );

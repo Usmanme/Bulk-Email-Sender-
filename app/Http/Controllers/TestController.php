@@ -11,7 +11,7 @@ class TestController extends Controller
     //
     public function batch(){
 
-        $email_file_id = 37;
+        $email_file_id = $id;
 
         $emails_collection = Email::where('email_file_id', $email_file_id)->get();
         $emails = $emails_collection->pluck('email')->toArray(); 

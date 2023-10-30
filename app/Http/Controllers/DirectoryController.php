@@ -150,4 +150,46 @@ class DirectoryController extends Controller
         return response()->json(['success' => 'Email deleted successfully.'], 200);
     }
 
+    public function verify($id){
+        
+        $email_file_id = $id;
+
+        $emails_collection = Email::where('email_file_id', $email_file_id)->get();
+
+        foreach($emails_collection as $email){
+            $email->status = 'Verifying';
+            $email->save();
+        }
+
+        $emails = $emails_collection->pluck('email')->toArray(); 
+        $email_String = implode(',', $emails);
+
+        $api_key= "test_923437f149bad62c093b";
+        $base_url = "https://api.emailable.com/v1/";
+        $endpoint = "batch";
+        
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $base_url.$endpoint);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            'Content-Type: application/x-www-form-urlencoded',
+        ]);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, 'emails='.$email_String.'&api_key='.$api_key.'');
+
+        $response = curl_exec($ch);
+        $batch_id = json_decode($response)->id;
+
+        curl_close($ch);
+
+        Log::info(''.$batch_id);
+        $email_file = EmailFile::find($email_file_id);
+        $email_file->verification = 'Verifying';
+        $email_file->batch_id = $batch_id;
+        $email_file->save();
+
+        return redirect()->back()->with('success', 'Verification started successfully.');
+
+    }
+
 }

@@ -67,6 +67,7 @@
                         <th>File</th>
                         <th>Emails</th>
                         <th>Date</th>
+                        <th>Verification</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -83,14 +84,21 @@
                                 {{ $email_file->created_at->toDateString() }}
                             </td>
                             <td>
+                                {{$email_file->verification}}
+                            </td>
+                            <td>
                                 <div class="dropdown">
                                     <button type="button" class="btn btn-sm dropdown-toggle hide-arrow py-0" data-bs-toggle="dropdown">
                                       <i data-feather="more-vertical"></i>
                                     </button>
                                     <div class="dropdown-menu dropdown-menu-end">
-                                        <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#email_list{{$email_file->id}}">
+                                        <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#email_list{{$email_file->id}}">
                                             <i data-feather="list" class="me-50"></i>
                                             <span>Emails</span>
+                                        </a>
+                                        <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#verify{{$email_file->id}}">
+                                            <i data-feather="check-circle" class="me-50"></i>
+                                            <span>Verify</span>
                                         </a>
                                         
                                       <a class="dropdown-item" href="{{ route('directory.download-file', ['id' => $email_file->id]) }}">
@@ -149,6 +157,48 @@
     </div>
 
     @foreach($email_files as $email_file)
+    <div class="modal fade" id="verify{{$email_file->id}}" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-edit-user">
+          <div class="modal-content">
+            <div class="modal-header bg-transparent">
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body pb-1 px-sm-5 pt-50">
+                <div class="text-center mb-2">
+                @if($email_file->batch_id ==null)
+                <h5 class="mb-1">Verify {{$email_file->emails->count()}} emails in {{$email_file->original_file_name}}?</h5>
+                @else
+                <h5 class="mb-1">Verifying {{$email_file->emails->count()}} emails in {{$email_file->original_file_name}}</h5>
+                @endif
+                </div>
+                <div class="text-center mb-2">
+                    @if($email_file->batch_id ==null)
+                    <a href="{{ route('directory.verify', ['id' => $email_file->id]) }}">
+                        <button class="btn btn-primary mr-2">
+                            Verify
+                        </button>
+                    </a>
+                    <button class="btn btn-secondary" data-bs-dismiss="modal" style="margin-left: 15px;">
+                        Cancel
+                    </button>
+                    @else
+                    {{-- <button disabled class="btn btn-primary mr-2">
+                        Verify
+                    </button> --}}
+                    <button class="btn btn-secondary" data-bs-dismiss="modal" style="margin-left: 15px;">
+                        Back
+                    </button>
+                    @endif
+                    
+                </div>
+            </div>
+          </div>
+        </div>
+    </div>
+
+    @endforeach
+
+    @foreach($email_files as $email_file)
     <div class="modal fade" id="delete_file{{$email_file->id}}" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered modal-edit-user">
           <div class="modal-content">
@@ -196,6 +246,7 @@
                 <thead>
                     <tr>
                         <th>Email</th>
+                        <th>Status</th>
                         <th>Delete</th>
                     </tr>
                 </thead>
@@ -204,6 +255,9 @@
                         <tr class="email-row" id="email-row-id-{{$email->id}}">
                             <td>
                                 {{ $email->email }}
+                            </td>
+                            <td>
+                                {{$email->status}}
                             </td>
                             <td>
                                 <a href="javascript:void(0);" onclick="deleteEmail({{$email->id}}, {{$email_file->id}})">
