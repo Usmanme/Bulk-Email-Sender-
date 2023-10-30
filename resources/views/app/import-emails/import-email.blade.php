@@ -96,10 +96,12 @@
                                             <i data-feather="list" class="me-50"></i>
                                             <span>Emails</span>
                                         </a>
+                                        @if($email_file->verification == 'Unverified')
                                         <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#verify{{$email_file->id}}">
                                             <i data-feather="check-circle" class="me-50"></i>
                                             <span>Verify</span>
                                         </a>
+                                        @endif
                                         
                                       <a class="dropdown-item" href="{{ route('directory.download-file', ['id' => $email_file->id]) }}">
                                         <i data-feather="download" class="me-50"></i>
@@ -165,11 +167,7 @@
             </div>
             <div class="modal-body pb-1 px-sm-5 pt-50">
                 <div class="text-center mb-2">
-                @if($email_file->batch_id ==null)
-                <h5 class="mb-1">Verify {{$email_file->emails->count()}} emails in {{$email_file->original_file_name}}?</h5>
-                @else
-                <h5 class="mb-1">Verification in progress for {{$email_file->emails->count()}} emails in {{$email_file->original_file_name}}</h5>
-                @endif
+                <h5 class="mb-1">Verify {{$email_file->emails->count()}} emails in {{$email_file->original_file_name}}?</h5>                
                 </div>
                 <div class="text-center mb-2">
                     @if($email_file->batch_id ==null)
@@ -246,7 +244,10 @@
                 <thead>
                     <tr>
                         <th>Email</th>
+                        @if($email_file->batch_id !=null)
                         <th>Status</th>
+                        <th>Score</th>
+                        @endif
                         <th>Delete</th>
                     </tr>
                 </thead>
@@ -256,9 +257,14 @@
                             <td>
                                 {{ $email->email }}
                             </td>
+                            @if($email_file->batch_id !=null)
                             <td>
                                 {{$email->status}}
                             </td>
+                            <td>
+                                {{$email->score}}
+                            </td>
+                            @endif
                             <td>
                                 <a href="javascript:void(0);" onclick="deleteEmail({{$email->id}}, {{$email_file->id}})">
                                     <i data-feather="trash" class="me-50"></i>
