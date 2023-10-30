@@ -183,9 +183,15 @@ class DirectoryController extends Controller
         curl_close($ch);
 
         Log::info(''.$batch_id);
+
+        $emails_count = count($emails);
+        $seconds_to_wait = intdiv($emails_count, 30);
+
         $email_file = EmailFile::find($email_file_id);
         $email_file->verification = 'Verifying';
         $email_file->batch_id = $batch_id;
+        $email_file->verification_started = now();
+        $email_file->verification_end = now()->addSeconds($seconds_to_wait);
         $email_file->save();
 
         return redirect()->back()->with('success', 'Verification started successfully.');

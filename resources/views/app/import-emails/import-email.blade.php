@@ -168,7 +168,7 @@
                 @if($email_file->batch_id ==null)
                 <h5 class="mb-1">Verify {{$email_file->emails->count()}} emails in {{$email_file->original_file_name}}?</h5>
                 @else
-                <h5 class="mb-1">Verifying {{$email_file->emails->count()}} emails in {{$email_file->original_file_name}}</h5>
+                <h5 class="mb-1">Verification in progress for {{$email_file->emails->count()}} emails in {{$email_file->original_file_name}}</h5>
                 @endif
                 </div>
                 <div class="text-center mb-2">
