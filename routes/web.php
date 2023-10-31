@@ -1,5 +1,6 @@
 <?php
 
+use App\Events\VerificationNotification;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\DirectoryController;
@@ -52,6 +53,14 @@ Route::group(
 
 Route::get('/batch', [TestController::class, 'batch']);
 Route::get('/batch-status', [TestController::class, 'batch_status_2']);
+
+Route::get('/event', function(){
+    event(new VerificationNotification('Sample Message'));
+});
+Route::get('/listen', function(){
+    return view('listen');
+});
+
 
 Route::group(
     ['prefix' => 'document-upload' ,'as' => 'document-upload.'],

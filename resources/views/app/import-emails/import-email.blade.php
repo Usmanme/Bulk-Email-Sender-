@@ -259,7 +259,7 @@
                             </td>
                             @if($email_file->batch_id !=null)
                             <td>
-                                {{$email->status}}
+                                {{ucfirst($email->status)}}
                             </td>
                             <td>
                                 {{$email->score}}
