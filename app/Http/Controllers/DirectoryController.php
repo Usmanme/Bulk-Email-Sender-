@@ -57,19 +57,13 @@ class DirectoryController extends Controller
             $response_emails = $response->json()['emails'];
             foreach($response_emails as $response_email){
                 $email = Email::where('email', $response_email['email'])
-                ->where('email_file_id', $user_email_file->id);
+                ->where('email_file_id', $user_email_file->id)->first();
                 if($email){
                     $email->status = $response_email['state'];
                     $email->score = strval($response_email['score']);
                     $email->save();
                 }
             }
-            
-            // $unknown_emails = Email::where('status', 'Verifying');
-            // foreach($unknown_emails as $unknown_email){
-            //     $unknown_email->status = 'Unknown';
-            //     $unknown_email->save();
-            // }
 
             Log::info(''.$response);
         }
@@ -242,7 +236,7 @@ class DirectoryController extends Controller
         Log::info(''.$batch_id);
 
         $emails_count = count($emails);
-        $seconds_to_wait = intdiv($emails_count, 5);
+        $seconds_to_wait = intdiv($emails_count, 4);
 
         $email_file = EmailFile::find($email_file_id);
         $email_file->verification = 'Verifying';
