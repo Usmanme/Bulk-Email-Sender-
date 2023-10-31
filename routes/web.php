@@ -37,7 +37,6 @@ Route::group(
         Route::post('/store', [DocumentController::class, 'store'])->name('store');
     }
 );
-//verification rate of emailable: 30/sec
 Route::group(
     ['prefix' => 'directory', 'as' => 'directory.'],
     function () {

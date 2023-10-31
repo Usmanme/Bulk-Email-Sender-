@@ -197,11 +197,14 @@ class DirectoryController extends Controller
 
             if($email){
                 $email->delete();
+                return response()->json(['success' => 'Email deleted successfully.'], 200);
             }
         }catch(\Exception $e){
             Log::info($e->getMessage());
+            return response()->json(['error' => 'Email deletion failed.'], 404);
+
         }
-        return response()->json(['success' => 'Email deleted successfully.'], 200);
+        
     }
 
     public function verify($id){
