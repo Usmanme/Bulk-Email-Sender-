@@ -300,6 +300,7 @@
         elementToRemove.classList.add('smooth-remove');
         elementToRemove.addEventListener('transitionend', function () {
         elementToRemove.remove();
+    })
         // Make an AJAX request to the Laravel route
         axios.delete(`/directory/delete-email/${emailId}`)
             .then(response => {
@@ -310,7 +311,7 @@
                 emailCountElement.innerHTML = parseInt(emailCountElement.innerHTML) - 1;
                 
                 });            
-            })
+            
     }
 
 
